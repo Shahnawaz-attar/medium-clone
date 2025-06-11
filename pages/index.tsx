@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Header from '../components/Header'
 import PostCard from '../components/PostCard'
+import Footer from '../components/Footer'
 import { sanityClient } from '../sanity'
 import { Posts } from "../typing";
 
@@ -45,6 +46,7 @@ const Home = ({ posts }: Props) => {
           <PostCard key={post._id} post={post} />
         ))}
       </div>
+      <Footer />
     </div>
   );
 };
