@@ -1,7 +1,7 @@
-import Link from "next/link";
-import React from "react";
+import Link from 'next/link'
+import React from 'react'
 
-function Header() {
+const Header: React.FC = () => {
   return (
     <header className='flex justify-between max-w-7xl mx-auto p-5'>
       <div className='flex items-center space-x-5'>

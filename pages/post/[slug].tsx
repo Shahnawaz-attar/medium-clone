@@ -1,11 +1,12 @@
-import { GetStaticProps } from "next";
-import React from "react";
-import Header from "../../components/Header";
-import { sanityClient, urlFor } from "../../sanity";
-import { Posts } from "../../typing";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { GetStaticProps } from 'next'
+import React from 'react'
+import Header from '../../components/Header'
+import FormField from '../../components/FormField'
+import { sanityClient, urlFor } from '../../sanity'
+import { Posts } from '../../typing'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface IFormInput {
   _id: string;
@@ -26,24 +27,23 @@ const Post = ({ post }: Props) => {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async data => {
-    await fetch(`/api/createComment`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-      .then(res => {
-        if (res.status === 200) {
-          toast("Sumitted comment successfully", {
-            type: "success",
-          });
-        }
-        reset();
+    try {
+      const res = await fetch('/api/createComment', {
+        method: 'POST',
+        body: JSON.stringify(data),
       })
-      .catch(err => console.log(err));
+      if (res.status === 200) {
+        toast('Submitted comment successfully', { type: 'success' })
+      }
+      reset()
+    } catch (err) {
+      toast('Failed to submit comment', { type: 'error' })
+    }
   };
 
   return (
     <main className='pb-10'>
-      <ToastContainer />;
+      <ToastContainer />
       <Header />
       <img
         className='w-full h-40 object-cover'
@@ -77,42 +77,33 @@ const Post = ({ post }: Props) => {
 
         <input {...register("_id")} type='hidden' name='_id' value={post._id} />
 
-        <label htmlFor='' className='block mb-5 '>
-          <span className='text-gray-700'>Name : </span>
-          <input
-            {...register("name", { required: true })}
-            className=' border px-3 py-2 rounded block w-full outline-none focus:shadow-md form-input focus:ring-1'
-            type={"text"}
-            placeholder='Name Please'
-          />
-          {errors.name && (
-            <span className='text-red-500'>The Name field is required</span>
-          )}
-        </label>
-        <label htmlFor='' className='block mb-5 '>
-          <span className='text-gray-700'>Email : </span>
-          <input
-            {...register("email", { required: true })}
-            className=' border px-3 py-2 rounded block w-full outline-none shadow focus:shadow-md focus:ring-1'
-            type={"email"}
-            placeholder='Email Please'
-          />
-          {errors.email && (
-            <span className='text-red-500'>The Email field is required</span>
-          )}
-        </label>
-        <label htmlFor='' className='block mb-5 '>
-          <span className='text-gray-700'>Comment : </span>
-          <textarea
-            {...register("comment", { required: true })}
-            className=' border px-3 py-2 rounded block w-full outline-none focus:shadow-md focus:ring-1'
-            placeholder='Leave you comment'
-            rows={8}
-          />
-          {errors.comment && (
-            <span className='text-red-500'>The Comment field is required</span>
-          )}
-        </label>
+        <FormField
+          label='Name'
+          name='name'
+          register={register}
+          required
+          placeholder='Name Please'
+          errors={errors}
+        />
+        <FormField
+          label='Email'
+          name='email'
+          type='email'
+          register={register}
+          required
+          placeholder='Email Please'
+          errors={errors}
+        />
+        <FormField
+          label='Comment'
+          name='comment'
+          register={register}
+          required
+          textarea
+          rows={8}
+          placeholder='Leave your comment'
+          errors={errors}
+        />
 
         <label htmlFor='' className='block mb-5'>
           <button className='text-blue-600 px-3 py-2 rounded border border-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-500  w-full'>
