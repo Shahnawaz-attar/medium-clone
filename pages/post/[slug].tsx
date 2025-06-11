@@ -2,6 +2,7 @@ import { GetStaticProps } from 'next'
 import React from 'react'
 import Header from '../../components/Header'
 import FormField from '../../components/FormField'
+import Footer from '../../components/Footer'
 import { sanityClient, urlFor } from '../../sanity'
 import { Posts } from '../../typing'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -125,6 +126,7 @@ const Post = ({ post }: Props) => {
           </div>
         ))}
       </div>
+      <Footer />
     </main>
   );
 };
